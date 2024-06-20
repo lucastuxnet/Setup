@@ -17,6 +17,9 @@ sudo chmod 666 /var/run/docker.sock
 # Instalar Podman
 sudo apt install -y podman
 
+# Instalar Curl
+sudo apt install curl
+
 # Baixar e configurar cosign
 curl -O -L "https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64"
 sudo mv cosign-linux-amd64 /usr/local/bin/cosign
