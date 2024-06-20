@@ -14,8 +14,15 @@ sudo usermod -aG docker $USER
 # Ajustar permissões do Docker
 sudo chmod 666 /var/run/docker.sock
 
+# Instalar o Pip
+sudo apt install python3-pip
+sudo -H pip3 install --upgrade pip
+
 # Instalar Podman
 sudo apt install -y podman
+
+# Instalar Podman-compose
+pip3 install podman-compose
 
 # Instalar Curl
 sudo apt install curl
@@ -40,4 +47,3 @@ podman run -it -v $PWD:/work:z docker.io/library/nginx openssl genrsa -out /work
 podman run -it -v $PWD:/work:z docker.io/library/nginx openssl rsa -in /work/esolvere_private.pem -pubout -out /work/esolvere_public.pem
 
 echo "Script concluído com sucesso!"
-
