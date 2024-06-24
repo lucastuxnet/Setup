@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# Define a função para exibir mensagens e finalizar em caso de erro
+error_exit() {
+    echo "$1" 1>&2
+    exit 1
+}
+
+# Entrar na pasta images
+cd images || error_exit "Erro ao entrar na pasta images."
+
+# Mostrar o conteúdo da pasta
+echo "Conteúdo da pasta 'images':"
+ls || error_exit "Erro ao listar o conteúdo da pasta."
+
+# Solicitar o nome e a tag da imagem
+read -p "Digite o nome da imagem: " nome_imagem
+read -p "Digite a tag da imagem: " tag_imagem
+
+# Construir a imagem com o podman
+podman build -t "${nome_imagem}:${tag_imagem}" . || error_exit "Erro ao construir a imagem."
+
+# Salvar o nome da imagem e tag no arquivo JSON
+echo "{ \"imagem\": \"${nome_imagem}:${tag_imagem}\" }" > images.JSON || error_exit "Erro ao salvar no arquivo images.JSON."
+
+# Verificar se a imagem foi criada
+echo "Verificando se a imagem foi criada:"
+podman images | grep "${nome_imagem}:${tag_imagem}" || error_exit "Imagem não encontrada."
+
+# Perguntar se deseja criptografar e assinar a imagem
+read -p "Deseja criptografar e assinar a imagem? (sim/nao): " resposta
+
+if [ "$resposta" != "sim" ]; then
+    echo "Script finalizado."
+    exit 0
+fi
+
+# Conectar ao Docker Hub
+podman login || error_exit "Erro ao conectar ao Docker Hub."
+echo "Login podman efetuado com sucesso."
+
+# Recuperar o nome da imagem e tag do arquivo JSON
+imagem_tag=$(jq -r '.imagem' images.JSON) || error_exit "Erro ao ler o arquivo images.JSON."
+
+# Criptografar e enviar a imagem
+podman push --encryption-key jwe:certs/esolvere_public.pem "${imagem_tag}" || error_exit "Erro ao enviar a imagem."
+echo "Imagem criptografada com sucesso."
+
+# Conectar ao Docker Hub com Docker CLI
+docker login || error_exit "Erro ao conectar ao Docker Hub com Docker CLI."
+echo "Login docker efetuado com sucesso."
+
+# Fazer pull da imagem de docker.io
+buildah pull --decryption-key certs/esolvere_private.pem "docker.io/esolverehub/${imagem_tag}" || error_exit "Erro ao fazer pull da imagem."
+echo "Pull efetuado com sucesso."
+
+# Assinar a imagem
+cosign sign -key certs/cosign.key "docker.io/esolverehub/${imagem_tag}" || error_exit "Erro ao assinar a imagem."
+echo "Imagem assinada com sucesso."
+
+# Finalizar o script
+echo "Script finalizado."
