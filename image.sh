@@ -19,7 +19,7 @@ read -p "Digite a tag da imagem: " tag_imagem
 
 # Construir a imagem com o podman
 echo "Construindo a imagem com o podman..."
-podman build -t "${nome_imagem}:${tag_imagem}" . || error_exit "Erro ao construir a imagem."
+podman build -t docker.io/esolverehub/"${nome_imagem}:${tag_imagem}" . || error_exit "Erro ao construir a imagem."
 
 # Verificar se a construção foi bem-sucedida
 if [ $? -eq 0 ]; then
@@ -34,14 +34,6 @@ echo "{ \"imagem\": \"${nome_imagem}:${tag_imagem}\" }" > images.JSON || error_e
 # Listar todas as imagens para verificação
 echo "Verificando as imagens disponíveis:"
 podman images
-
-# Verificar se a imagem foi criada
-echo "Procurando a imagem ${nome_imagem}:${tag_imagem}:"
-if podman images | grep -q "${nome_imagem}:${tag_imagem}"; then
-    echo "Imagem encontrada."
-else
-    error_exit "Imagem não encontrada."
-fi
 
 # Perguntar se deseja criptografar e assinar a imagem
 read -p "Deseja criptografar e assinar a imagem? (sim/nao): " resposta
