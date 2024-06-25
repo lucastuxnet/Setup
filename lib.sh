@@ -55,12 +55,13 @@ mkdir -p certs && cd certs
 # Gera as chaves de segurança
 cosign generate-key-pair && \
 podman run -it -v $PWD:/work:z docker.io/library/nginx openssl genrsa -out /work/esolvere_private.pem && \
-podman run -it -v $PWD:/work:z docker.io/library/nginx openssl rsa -in /work/esolvere_private.pem -pubout -out /work/esolvere_public.pem && \
-podman stop $(podman ps -a -q) & podman rm -f $(podman ps -a -q) && podman rmi -f $(podman images -a -q) 
+podman run -it -v $PWD:/work:z docker.io/library/nginx openssl rsa -in /work/esolvere_private.pem -pubout -out /work/esolvere_public.pem
+
 
 if [ $? -eq 0 ]; then
     echo "Chaves de segurança criadas com sucesso."
 else
     echo "Houve um erro ao criar as chaves de segurança."
+    podman stop $(podman ps -a -q) & podman rm -f $(podman ps -a -q) && podman rmi -f $(podman images -a -q) 
     exit 1
 fi
