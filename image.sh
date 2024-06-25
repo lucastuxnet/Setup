@@ -19,7 +19,7 @@ read -p "Digite a tag da imagem: " tag_imagem
 
 # Construir a imagem com o podman
 echo "Construindo a imagem com o podman..."
-podman build -t docker.io/esolverehub/"${nome_imagem}:${tag_imagem}" . || error_exit "Erro ao construir a imagem."
+podman build -t "docker.io/esolverehub/${nome_imagem}:${tag_imagem}" . || error_exit "Erro ao construir a imagem."
 
 # Verificar se a construção foi bem-sucedida
 if [ $? -eq 0 ]; then
@@ -53,7 +53,7 @@ imagem_tag=$(jq -r '.imagem' images.JSON) || error_exit "Erro ao ler o arquivo i
 
 # Criptografar e enviar a imagem
 echo "Criptografando e enviando a imagem ${imagem_tag}..."
-podman push --encryption-key jwe:certs/esolvere_public.pem "${imagem_tag}" || error_exit "Erro ao enviar a imagem."
+podman push --encryption-key jwe:certs/esolvere_public.pem "docker.io/esolverehub/${imagem_tag}" || error_exit "Erro ao enviar a imagem."
 echo "Imagem criptografada com sucesso."
 
 # Conectar ao Docker Hub com Docker CLI
