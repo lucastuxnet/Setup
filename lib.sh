@@ -11,10 +11,6 @@ fi
 # Executa a instalação e configuração
 echo "Iniciando a instalação das aplicações e bibliotecas..."
 
-# Cria o diretório para imagens
-mkdir -p images
-cd images
-
 # Atualiza a lista de pacotes e instala as aplicações
 sudo apt-get update
 sudo apt install -y podman
