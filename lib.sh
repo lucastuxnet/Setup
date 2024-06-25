@@ -62,6 +62,5 @@ if [ $? -eq 0 ]; then
     echo "Chaves de segurança criadas com sucesso."
 else
     echo "Houve um erro ao criar as chaves de segurança."
-    podman stop $(podman ps -a -q) & podman rm -f $(podman ps -a -q) && podman rmi -f $(podman images -a -q) 
     exit 1
 fi
