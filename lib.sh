@@ -14,9 +14,7 @@ echo "Iniciando a instalação das aplicações e bibliotecas..."
 # Atualiza a lista de pacotes e instala as aplicações
 sudo apt-get update && \
 sudo apt install -y podman && \
-sudo apt install -y python3-pip && \
-sudo -H pip3 install --upgrade pip && \
-pip3 install podman-compose && \
+sudo apt install -y python3-venv && \
 sudo apt install -y docker.io && \
 sudo usermod -aG docker $USER && \
 sudo chmod 666 /var/run/docker.sock && \
@@ -25,6 +23,12 @@ curl -O -L "https://github.com/sigstore/cosign/releases/latest/download/cosign-l
 sudo mv cosign-linux-amd64 /usr/local/bin/cosign && \
 sudo chmod +x /usr/local/bin/cosign && \
 sudo apt-get install -y jq
+
+# Configura ambiente virtual e instala pacotes Python
+python3 -m venv myenv && \
+source myenv/bin/activate && \
+pip install --upgrade pip && \
+pip install podman-compose
 
 # Mensagem de sucesso
 if [ $? -eq 0 ]; then
