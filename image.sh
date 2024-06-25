@@ -6,13 +6,6 @@ error_exit() {
     exit 1
 }
 
-# Entrar na pasta images
-cd images || error_exit "Erro ao entrar na pasta images."
-
-# Mostrar o conteúdo da pasta
-echo "Conteúdo da pasta 'images':"
-ls || error_exit "Erro ao listar o conteúdo da pasta."
-
 # Solicitar o nome e a tag da imagem
 read -p "Digite o nome da imagem: " nome_imagem
 read -p "Digite a tag da imagem: " tag_imagem
