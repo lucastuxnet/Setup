@@ -1,30 +1,5 @@
 #!/bin/bash
 
-# Função para configurar registries.conf
-setup_registries_conf() {
-    echo "Configurando registries.conf..."
-    sudo tee /etc/containers/registries.conf > /dev/null <<EOF
-[registries.search]
-registries = ['docker.io', 'quay.io']
-
-[registries.insecure]
-registries = []
-
-[registries.block]
-registries = []
-EOF
-
-    if [ $? -eq 0 ]; then
-        echo "registries.conf configurado com sucesso."
-    else
-        echo "Houve um erro ao configurar registries.conf."
-        exit 1
-    fi
-}
-
-# Configure registries.conf
-setup_registries_conf
-
 # Pergunta se deseja instalar as bibliotecas e aplicações
 read -p "Deseja instalar as bibliotecas e as aplicações? (sim/não): " INSTALL_CONFIRMATION
 
@@ -84,6 +59,8 @@ podman run -it -v $PWD:/work:z docker.io/library/nginx openssl rsa -in /work/eso
 
 if [ $? -eq 0 ]; then
     echo "Chaves de segurança criadas com sucesso."
+    # Edita o registries
+    setup_registries_conf
     # Limpa containers e imagens do Podman
     cleanup_podman
 else
@@ -105,3 +82,26 @@ cleanup_podman() {
         exit 1
     fi
 }
+
+# Função para configurar registries.conf
+setup_registries_conf() {
+    echo "Configurando registries.conf..."
+    sudo tee /etc/containers/registries.conf > /dev/null <<EOF
+[registries.search]
+registries = ['docker.io', 'quay.io']
+
+[registries.insecure]
+registries = []
+
+[registries.block]
+registries = []
+EOF
+
+    if [ $? -eq 0 ]; then
+        echo "registries.conf configurado com sucesso."
+    else
+        echo "Houve um erro ao configurar registries.conf."
+        exit 1
+    fi
+}
+
