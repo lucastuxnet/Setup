@@ -1,5 +1,20 @@
 #!/bin/bash
 
+# Função para limpar containers e imagens do Podman
+cleanup_podman() {
+    echo "Limpando containers e imagens do Podman..."
+    podman stop $(podman ps -a -q) && \
+    podman rm -f $(podman ps -a -q) && \
+    podman rmi -f $(podman images -a -q)
+    
+    if [ $? -eq 0 ]; then
+        echo "O procedimento foi efetuado com sucesso."
+    else
+        echo "Houve um erro ao limpar os containers e imagens do Podman."
+        exit 1
+    fi
+}
+
 # Pergunta se deseja instalar as bibliotecas e aplicações
 read -p "Deseja instalar as bibliotecas e as aplicações? (sim/não): " INSTALL_CONFIRMATION
 
@@ -57,9 +72,10 @@ cosign generate-key-pair && \
 podman run -it -v $PWD:/work:z docker.io/library/nginx openssl genrsa -out /work/esolvere_private.pem && \
 podman run -it -v $PWD:/work:z docker.io/library/nginx openssl rsa -in /work/esolvere_private.pem -pubout -out /work/esolvere_public.pem
 
-
 if [ $? -eq 0 ]; then
     echo "Chaves de segurança criadas com sucesso."
+    # Limpa containers e imagens do Podman
+    cleanup_podman
 else
     echo "Houve um erro ao criar as chaves de segurança."
     exit 1
