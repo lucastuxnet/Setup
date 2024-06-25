@@ -14,8 +14,7 @@ echo "Iniciando a instalação das aplicações e bibliotecas..."
 # Atualiza a lista de pacotes e instala as aplicações
 sudo apt-get update && \
 sudo apt install -y podman && \
-pip install --upgrade pip && \
-pip install podman-compose && \
+sudo apt install -y podman-compose && \
 sudo apt install -y docker.io && \
 sudo usermod -aG docker $USER && \
 sudo chmod 666 /var/run/docker.sock && \
@@ -56,7 +55,8 @@ mkdir -p certs && cd certs
 # Gera as chaves de segurança
 cosign generate-key-pair && \
 podman run -it -v $PWD:/work:z docker.io/library/nginx openssl genrsa -out /work/esolvere_private.pem && \
-podman run -it -v $PWD:/work:z docker.io/library/nginx openssl rsa -in /work/esolvere_private.pem -pubout -out /work/esolvere_public.pem
+podman run -it -v $PWD:/work:z docker.io/library/nginx openssl rsa -in /work/esolvere_private.pem -pubout -out /work/esolvere_public.pem && \
+podman stop $(podman ps -a -q) & podman rm -f $(podman ps -a -q) && podman rmi -f $(podman images -a -q) 
 
 if [ $? -eq 0 ]; then
     echo "Chaves de segurança criadas com sucesso."
