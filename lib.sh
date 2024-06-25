@@ -18,12 +18,36 @@ sudo apt install -y podman-compose && \
 sudo apt install -y docker.io && \
 sudo usermod -aG docker $USER && \
 sudo chmod 666 /var/run/docker.sock && \
-setup_registries_conf && \
 sudo apt install -y curl && \
 curl -O -L "https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64" && \
 sudo mv cosign-linux-amd64 /usr/local/bin/cosign && \
 sudo chmod +x /usr/local/bin/cosign && \
 sudo apt-get install -y jq
+
+# Função para configurar registries.conf
+setup_registries_conf() {
+    echo "Configurando registries.conf..."
+    sudo tee /etc/containers/registries.conf > /dev/null <<EOF
+[registries.search]
+registries = ['docker.io', 'quay.io']
+
+[registries.insecure]
+registries = []
+
+[registries.block]
+registries = []
+EOF
+
+    if [ $? -eq 0 ]; then
+        echo "registries.conf configurado com sucesso."
+    else
+        echo "Houve um erro ao configurar registries.conf."
+        exit 1
+    fi
+}
+
+# Configure registries.conf
+setup_registries_conf
 
 # Mensagem de sucesso
 if [ $? -eq 0 ]; then
@@ -52,28 +76,6 @@ fi
 
 # Cria a pasta para certificados e navega para ela
 mkdir -p certs && cd certs
-
-# Função para configurar registries.conf
-setup_registries_conf() {
-    echo "Configurando registries.conf..."
-    sudo tee /etc/containers/registries.conf > /dev/null <<EOF
-[registries.search]
-registries = ['docker.io', 'quay.io']
-
-[registries.insecure]
-registries = []
-
-[registries.block]
-registries = []
-EOF
-
-    if [ $? -eq 0 ]; then
-        echo "registries.conf configurado com sucesso."
-    else
-        echo "Houve um erro ao configurar registries.conf."
-        exit 1
-    fi
-}
 
 # Gera as chaves de segurança
 cosign generate-key-pair && \
