@@ -1,19 +1,47 @@
 #!/bin/bash
 
-# Função para limpar containers e imagens do Podman
-cleanup_podman() {
-    echo "Limpando containers e imagens do Podman..."
-    podman stop $(podman ps -a -q) && \
-    podman rm -f $(podman ps -a -q) && \
-    podman rmi -f $(podman images -a -q)
-    
+# Função para configurar registries.conf
+setup_registries_conf() {
+    echo "Configurando registries.conf..."
+    sudo tee /etc/containers/registries.conf > /dev/null <<EOF
+[registries.search]
+registries = ['docker.io', 'quay.io']
+
+[registries.insecure]
+registries = []
+
+[registries.block]
+registries = []
+EOF
+
     if [ $? -eq 0 ]; then
-        echo "O procedimento foi efetuado com sucesso."
+        echo "registries.conf configurado com sucesso."
     else
-        echo "Houve um erro ao limpar os containers e imagens do Podman."
+        echo "Houve um erro ao configurar registries.conf."
         exit 1
     fi
 }
+
+# Função para login no Podman
+podman_login() {
+    echo "Logando no registro de contêineres..."
+    podman login docker.io
+
+    if [ $? -eq 0 ]; then
+        echo "Login efetuado com sucesso."
+    else
+        echo "Falha no login. Verifique suas credenciais e conectividade."
+        exit 1
+    fi
+}
+
+# Configure registries.conf
+setup_registries_conf
+
+# Chama a função de login
+podman_login
+
+# O restante do seu script continua aqui...
 
 # Pergunta se deseja instalar as bibliotecas e aplicações
 read -p "Deseja instalar as bibliotecas e as aplicações? (sim/não): " INSTALL_CONFIRMATION
@@ -80,3 +108,18 @@ else
     echo "Houve um erro ao criar as chaves de segurança."
     exit 1
 fi
+
+# Função para limpar containers e imagens do Podman
+cleanup_podman() {
+    echo "Limpando containers e imagens do Podman..."
+    podman stop $(podman ps -a -q) && \
+    podman rm -f $(podman ps -a -q) && \
+    podman rmi -f $(podman images -a -q)
+
+    if [ $? -eq 0 ]; then
+        echo "O procedimento foi efetuado com sucesso."
+    else
+        echo "Houve um erro ao limpar os containers e imagens do Podman."
+        exit 1
+    fi
+}
