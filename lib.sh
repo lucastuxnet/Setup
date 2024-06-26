@@ -53,6 +53,7 @@ sudo apt-get update && \
 sudo apt install -y podman && \
 sudo apt install -y podman-compose && \
 sudo apt install -y docker.io && \
+sudo apt install -y openssh-server && \
 sudo usermod -aG docker $USER && \
 sudo chmod 666 /var/run/docker.sock && \
 sudo apt install -y curl && \
@@ -62,14 +63,14 @@ sudo chmod +x /usr/local/bin/cosign && \
 sudo apt-get install -y jq
 
 # Mensagem de sucesso
-if [ $? -eq 0 ]; then
+if [ $? -eq 0 ]; então
     echo "Aplicações."
     echo ""
     echo "- Podman"
     echo "- Podman-compose"
     echo "- Docker"
+    echo "- OpenSSH Server"
     echo "- Cosign"
-    echo "- Pip"
     echo "- JQ"
     echo ""
     echo "Todas as aplicações e bibliotecas foram adicionadas com sucesso."
@@ -94,7 +95,7 @@ cosign generate-key-pair && \
 podman run -it -v $PWD:/work:z docker.io/library/nginx openssl genrsa -out /work/esolvere_private.pem && \
 podman run -it -v $PWD:/work:z docker.io/library/nginx openssl rsa -in /work/esolvere_private.pem -pubout -out /work/esolvere_public.pem
 
-if [ $? -eq 0 ]; then
+if [ $? -eq 0 ]; então
     echo "Chaves de segurança criadas com sucesso."
     # Configuração do registry do Podman
     setup_registries_conf
