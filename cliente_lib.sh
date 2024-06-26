@@ -64,3 +64,12 @@ else
     echo "Houve um erro durante a instalação das aplicações e bibliotecas."
     exit 1
 fi
+
+if [ $? -eq 0 ]; então
+    echo "Configuração do registry foi um sucesso."
+    # Configuração do registry do Podman
+    setup_registries_conf
+else
+    echo "Ocorreu um erro na configuração do registry."
+    exit 1
+fi
