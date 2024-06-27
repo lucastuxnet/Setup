@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Função para configurar registries.conf
 setup_registries_conf() {
     echo "Configurando registries.conf..."
@@ -40,7 +42,6 @@ sudo apt install -y podman && \
 sudo apt install -y podman-compose && \
 sudo apt install -y docker.io && \
 sudo apt install -y openssh-server && \
-sudo apt install -y net-tools && \
 sudo usermod -aG docker $USER && \
 sudo chmod 666 /var/run/docker.sock && \
 sudo apt install -y curl && \
@@ -48,6 +49,23 @@ curl -O -L "https://github.com/sigstore/cosign/releases/latest/download/cosign-l
 sudo mv cosign-linux-amd64 /usr/local/bin/cosign && \
 sudo chmod +x /usr/local/bin/cosign && \
 sudo apt-get install -y jq
+
+# Verifica o status do SSH e ativa se necessário
+echo "Verificando o status do OpenSSH Server..."
+sudo service ssh status
+
+if [ $? -ne 0 ]; then
+    echo "O OpenSSH Server não está ativo. Ativando..."
+    sudo service ssh start
+    if [ $? -eq 0 ]; then
+        echo "O OpenSSH Server foi ativado com sucesso."
+    else
+        echo "Houve um erro ao ativar o OpenSSH Server."
+        exit 1
+    fi
+else
+    echo "O OpenSSH Server já está ativo."
+fi
 
 # Mensagem de sucesso
 if [ $? -eq 0 ]; then
@@ -59,7 +77,6 @@ if [ $? -eq 0 ]; then
     echo "- OpenSSH Server"
     echo "- Cosign"
     echo "- JQ"
-    echo "- Net-tools"
     echo ""
     echo "Todas as aplicações e bibliotecas foram adicionadas com sucesso."
 else
