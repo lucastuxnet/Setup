@@ -49,7 +49,7 @@ sudo chmod +x /usr/local/bin/cosign && \
 sudo apt-get install -y jq
 
 # Mensagem de sucesso
-if [ $? -eq 0 ]; então
+if [ $? -eq 0 ]; then
     echo "Aplicações."
     echo ""
     echo "- Podman"
@@ -62,14 +62,5 @@ if [ $? -eq 0 ]; então
     echo "Todas as aplicações e bibliotecas foram adicionadas com sucesso."
 else
     echo "Houve um erro durante a instalação das aplicações e bibliotecas."
-    exit 1
-fi
-
-if [ $? -eq 0 ]; então
-    echo "Configuração do registry foi um sucesso."
-    # Configuração do registry do Podman
-    setup_registries_conf
-else
-    echo "Ocorreu um erro na configuração do registry."
     exit 1
 fi
