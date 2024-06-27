@@ -63,7 +63,7 @@ sudo apt install -y podman && \
 sudo apt install -y podman-compose && \
 sudo apt install -y docker.io && \
 sudo apt install -y openssh-server && \
-sudo apt instal net-tools && \
+sudo apt install net-tools && \
 sudo usermod -aG docker $USER && \
 sudo chmod 666 /var/run/docker.sock && \
 sudo apt install -y curl && \
