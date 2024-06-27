@@ -40,6 +40,7 @@ sudo apt install -y podman && \
 sudo apt install -y podman-compose && \
 sudo apt install -y docker.io && \
 sudo apt install -y openssh-server && \
+sudo apt install -y net-tools && \
 sudo usermod -aG docker $USER && \
 sudo chmod 666 /var/run/docker.sock && \
 sudo apt install -y curl && \
@@ -58,6 +59,7 @@ if [ $? -eq 0 ]; then
     echo "- OpenSSH Server"
     echo "- Cosign"
     echo "- JQ"
+    echo "- Net-tools"
     echo ""
     echo "Todas as aplicações e bibliotecas foram adicionadas com sucesso."
 else
