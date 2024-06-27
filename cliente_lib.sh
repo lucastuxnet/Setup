@@ -76,6 +76,7 @@ if [ $? -eq 0 ]; then
     echo "- Podman-compose"
     echo "- Docker"
     echo "- OpenSSH Server"
+    echo "- Net-tools"
     echo "- Cosign"
     echo "- JQ"
     echo ""
