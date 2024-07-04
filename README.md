@@ -51,9 +51,3 @@ Procedimentos para execução do código.
   
   chmod +x cliente_pull.sh
   ./cliente_pull.sh
-
-
-
-
-
-./setup.sh
