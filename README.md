@@ -27,6 +27,33 @@ PIP
 
 Procedimentos para execução do código.
 
-chmod +x setup.sh
+- Bibliotecas e aplicações.
+  
+  chmod +x lib.sh
+  ./lib.sh
+
+- Assinatura e criptografia de imagem.
+  
+    chmod +x lib.sh
+    ./image.sh
+
+- Bibliotecas e aplicações no servidor cliente.
+  
+  chmod +x cliente_lib.sh
+  ./cliente_lib.sh
+
+- Transferência de chave privada entre local-cliente.
+  
+  chmod +x scp.sh
+  ./scp.sh
+
+- Descriptografia e pull da imagem no servidor cliente.
+  
+  chmod +x cliente_pull.sh
+  ./cliente_pull.sh
+
+
+
+
 
 ./setup.sh
