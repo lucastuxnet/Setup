@@ -72,7 +72,7 @@ curl -O -L "https://github.com/sigstore/cosign/releases/latest/download/cosign-l
 sudo mv cosign-linux-amd64 /usr/local/bin/cosign && \
 sudo chmod +x /usr/local/bin/cosign && \
 curl -O http://archive.ubuntu.com/ubuntu/pool/universe/g/golang-github-containernetworking-plugins/containernetworking-plugins_1.1.1+ds1-3build1_amd64.deb && \
-dpkg -i containernetworking-plugins_1.1.1+ds1-3build1_amd64.deb && \
+sudo dpkg -i containernetworking-plugins_1.1.1+ds1-3build1_amd64.deb && \
 sudo apt-get install -y jq
 
 # Mensagem de sucesso
