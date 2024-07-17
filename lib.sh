@@ -59,9 +59,8 @@ echo "Iniciando a instalação das aplicações e bibliotecas..."
 
 # Atualiza a lista de pacotes e instala as aplicações
 sudo apt-get update && \
-sudo apt install -y python3-pip && \
 sudo apt install -y podman && \
-sudo pip install podman-compose && \
+sudo apt install -y podman-compose && \
 sudo apt install -y docker.io && \
 sudo apt install -y openssh-server && \
 sudo apt install net-tools && \
